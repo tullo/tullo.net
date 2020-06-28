@@ -1,0 +1,369 @@
+{
+  "apps": {
+    "http": {
+      "servers": {
+        "static": {
+          "idle_timeout": "30s",
+          "listen": [
+            ":443"
+          ],
+          "logs": {
+            "logger_names": {
+              "amstutz-it.dk": "log0",
+              "tullo.net": "log1"
+            },
+            "skip_hosts": [
+              "www.tullo.net",
+              "www.amstutz-it.dk"
+            ]
+          },
+          "max_header_bytes": 10240,
+          "read_header_timeout": "10s",
+          "read_timeout": "10s",
+          "routes": [
+            {
+              "handle": [
+                {
+                  "handler": "subroute",
+                  "routes": [
+                    {
+                      "handle": [
+                        {
+                          "handler": "static_response",
+                          "headers": {
+                            "Location": [
+                              "https://amstutz-it.dk"
+                            ]
+                          },
+                          "status_code": 302
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "match": [
+                {
+                  "host": [
+                    "www.amstutz-it.dk"
+                  ]
+                }
+              ],
+              "terminal": true
+            },
+            {
+              "handle": [
+                {
+                  "handler": "subroute",
+                  "routes": [
+                    {
+                      "handle": [
+                        {
+                          "handler": "file_server",
+                          "root": "/var/www/amstutz-it.dk"
+                        }
+                      ]
+                    },
+                    {
+                      "handle": [
+                        {
+                          "handler": "headers",
+                          "response": {
+                            "set": {
+                              "Cache-Control": [
+                                "max-age=5184000"
+                              ]
+                            }
+                          }
+                        }
+                      ],
+                      "match": [
+                        {
+                          "file": {},
+                          "path": [
+                            "*.ico",
+                            "css/*.css",
+                            "*.js",
+                            "*.gif",
+                            "*.jpg",
+                            "*.jpeg",
+                            "*.png",
+                            "*.pdf",
+                            "*.txt",
+                            "*.svg",
+                            "*.woff"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "handle": [
+                        {
+                          "handler": "headers",
+                          "response": {
+                            "deferred": true,
+                            "delete": [
+                              "Server"
+                            ],
+                            "set": {
+                              "Content-Security-Policy": [
+                                "default-src 'self'; img-src 'self'; script-src 'self'; style-src 'self' 'nonce-KFOVYFCJmQHFbx'; object-src 'none'"
+                              ],
+                              "Strict-Transport-Security": [
+                                "max-age=63072000; includeSubDomains"
+                              ],
+                              "X-Content-Type-Options": [
+                                "nosniff"
+                              ],
+                              "X-Frame-Options": [
+                                "DENY"
+                              ],
+                              "X-Xss-Protection": [
+                                "1; mode=block"
+                              ]
+                            }
+                          }
+                        }
+                      ],
+                      "match": [
+                        {
+                          "path": [
+                            "/"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "handle": [
+                        {
+                          "encodings": {
+                            "gzip": {}
+                          },
+                          "handler": "encode"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "match": [
+                {
+                  "host": [
+                    "amstutz-it.dk"
+                  ]
+                }
+              ],
+              "terminal": true
+            },
+            {
+              "handle": [
+                {
+                  "handler": "subroute",
+                  "routes": [
+                    {
+                      "handle": [
+                        {
+                          "handler": "static_response",
+                          "headers": {
+                            "Location": [
+                              "https://tullo.net"
+                            ]
+                          },
+                          "status_code": 302
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "match": [
+                {
+                  "host": [
+                    "www.tullo.net"
+                  ]
+                }
+              ],
+              "terminal": true
+            },
+            {
+              "handle": [
+                {
+                  "handler": "subroute",
+                  "routes": [
+                    {
+                      "handle": [
+                        {
+                          "handler": "file_server",
+                          "root": "/var/www/tullo.net"
+                        }
+                      ]
+                    },
+                    {
+                      "handle": [
+                        {
+                          "handler": "headers",
+                          "response": {
+                            "set": {
+                              "Cache-Control": [
+                                "max-age=5184000"
+                              ]
+                            }
+                          }
+                        }
+                      ],
+                      "match": [
+                        {
+                          "file": {},
+                          "path": [
+                            "*.ico",
+                            "css/*.css",
+                            "*.js",
+                            "*.gif",
+                            "*.jpg",
+                            "*.jpeg",
+                            "*.png",
+                            "*.pdf",
+                            "*.txt",
+                            "*.svg",
+                            "*.woff"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "handle": [
+                        {
+                          "handler": "headers",
+                          "response": {
+                            "deferred": true,
+                            "delete": [
+                              "Server"
+                            ],
+                            "set": {
+                              "Content-Security-Policy": [
+                                "default-src 'self'; img-src 'self' https://www.google-analytics.com https://stats.g.doubleclick.net; script-src 'self' 'sha256-lA3cRa0v/LqYDVMOB626Yx0Zbt8ef2blVZoVjs5u9+k='; style-src 'self'; object-src 'none'"
+                              ],
+                              "Strict-Transport-Security": [
+                                "max-age=63072000; includeSubDomains"
+                              ],
+                              "X-Content-Type-Options": [
+                                "nosniff"
+                              ],
+                              "X-Frame-Options": [
+                                "DENY"
+                              ],
+                              "X-Xss-Protection": [
+                                "1; mode=block"
+                              ]
+                            }
+                          }
+                        }
+                      ],
+                      "match": [
+                        {
+                          "path": [
+                            "/"
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "handle": [
+                        {
+                          "encodings": {
+                            "gzip": {}
+                          },
+                          "handler": "encode"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "match": [
+                {
+                  "host": [
+                    "tullo.net"
+                  ]
+                }
+              ],
+              "terminal": true
+            }
+          ],
+          "tls_connection_policies": [
+            {
+              "match": {
+                "sni": [
+                  "amstutz-it.dk"
+                ]
+              },
+              "protocol_max": "tls1.3",
+              "protocol_min": "tls1.2"
+            },
+            {
+              "match": {
+                "sni": [
+                  "tullo.net"
+                ]
+              },
+              "protocol_max": "tls1.3",
+              "protocol_min": "tls1.2"
+            }
+          ]
+        }
+      }
+    },
+    "tls": {
+      "automation": {
+        "policies": [
+          {
+            "issuer": {
+              "email": "me@amstutz-it.dk",
+              "module": "acme"
+            },
+            "subjects": [
+              "amstutz-it.dk"
+            ]
+          },
+          {
+            "issuer": {
+              "email": "andreasamstutz@gmail.com",
+              "module": "acme"
+            },
+            "subjects": [
+              "tullo.net"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  "logging": {
+    "logs": {
+      "default": {
+        "exclude": [
+          "http.log.access.log0",
+          "http.log.access.log1"
+        ]
+      },
+      "log0": {
+        "include": [
+          "http.log.access.log0"
+        ],
+        "writer": {
+          "filename": "/var/log/caddy/amstutz-it.dk.access.log",
+          "output": "file"
+        }
+      },
+      "log1": {
+        "include": [
+          "http.log.access.log1"
+        ],
+        "writer": {
+          "filename": "/var/log/caddy/tullo.net.access.log",
+          "output": "file"
+        }
+      }
+    }
+  }
+}
