@@ -32,7 +32,7 @@
                           "handler": "static_response",
                           "headers": {
                             "Location": [
-                              "https://amstutz-it.dk"
+                              "https://amstutz-it.dk/"
                             ]
                           },
                           "status_code": 302
@@ -56,14 +56,6 @@
                 {
                   "handler": "subroute",
                   "routes": [
-                    {
-                      "handle": [
-                        {
-                          "handler": "file_server",
-                          "root": "/var/www/amstutz-it.dk"
-                        }
-                      ]
-                    },
                     {
                       "handle": [
                         {
@@ -107,10 +99,10 @@
                             ],
                             "set": {
                               "Content-Security-Policy": [
-                                "default-src 'self'; img-src 'self'; script-src 'self'; style-src 'self' 'nonce-KFOVYFCJmQHFbx'; object-src 'none'"
+                                "default-src 'self'; img-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; object-src 'none'"
                               ],
                               "Strict-Transport-Security": [
-                                "max-age=63072000; includeSubDomains"
+                                "max-age=63072000; includeSubDomains; preload"
                               ],
                               "X-Content-Type-Options": [
                                 "nosniff"
@@ -142,6 +134,14 @@
                           "handler": "encode"
                         }
                       ]
+                    },
+                    {
+                      "handle": [
+                        {
+                          "handler": "file_server",
+                          "root": "/var/www/amstutz-it.dk"
+                        }
+                      ]
                     }
                   ]
                 }
@@ -166,7 +166,7 @@
                           "handler": "static_response",
                           "headers": {
                             "Location": [
-                              "https://tullo.net"
+                              "https://tullo.net/"
                             ]
                           },
                           "status_code": 302
@@ -190,14 +190,6 @@
                 {
                   "handler": "subroute",
                   "routes": [
-                    {
-                      "handle": [
-                        {
-                          "handler": "file_server",
-                          "root": "/var/www/tullo.net"
-                        }
-                      ]
-                    },
                     {
                       "handle": [
                         {
@@ -244,7 +236,7 @@
                                 "default-src 'self'; img-src 'self' https://www.google-analytics.com https://stats.g.doubleclick.net; script-src 'self' 'sha256-lA3cRa0v/LqYDVMOB626Yx0Zbt8ef2blVZoVjs5u9+k='; style-src 'self'; object-src 'none'"
                               ],
                               "Strict-Transport-Security": [
-                                "max-age=63072000; includeSubDomains"
+                                "max-age=63072000; includeSubDomains; preload"
                               ],
                               "X-Content-Type-Options": [
                                 "nosniff"
@@ -274,6 +266,14 @@
                             "gzip": {}
                           },
                           "handler": "encode"
+                        }
+                      ]
+                    },
+                    {
+                      "handle": [
+                        {
+                          "handler": "file_server",
+                          "root": "/var/www/tullo.net"
                         }
                       ]
                     }
